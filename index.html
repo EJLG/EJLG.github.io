@@ -1,35 +1,37 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="ko">
+<head>
     <meta charset="UTF-8">
-    <title>입력 페이지</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  </head>
-  <body>
-    <form>
-      <input type="text" id="inputText">
-      <button type="button" onclick="sendText()">전송</button>
-    </form>
-    <p id="result"></p>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>카카오톡 간편로그인 템플릿</title>
+    <link rel="stylesheet" href="https://developers.kakao.com/sdk/js/kakao.min.css">
+</head>
+<body>
+    <div id="kakao-login-btn"></div>
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script>
-      function sendText() {
-        var input = $('#inputText').val();
-        var url = "/echo/html/";
-        $.ajax({
-          type: 'POST',
-          url: url,
-          data: {
-            input: input
-          },
-          dataType: 'html',
-          success: function(result) {
-            $('#result').html(result);
-          },
-          error: function(xhr, textStatus, errorThrown) {
-            console.error(errorThrown);
-          }
+        // SDK 초기화 함수 - 반드시 호출해야 합니다.
+        Kakao.init('YOUR_APP_KEY');
+
+        // 카카오로그인 버튼 생성 함수
+        function createKakaoLoginBtn() {
+            Kakao.Auth.createLoginButton({
+                container: '#kakao-login-btn',
+                success: function(authObj) {
+                    // authObj는 로그인한 사용자의 정보가 담겨있습니다.
+                    console.log(authObj);
+                },
+                fail: function(err) {
+                    // 에러 처리
+                    console.error(err);
+                }
+            });
+        }
+
+        // 페이지 로드 후 버튼 생성
+        document.addEventListener("DOMContentLoaded", function() {
+            createKakaoLoginBtn();
         });
-      }
     </script>
-  </body>
+</body>
 </html>
